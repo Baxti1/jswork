@@ -1,6 +1,7 @@
 window.addEventListener('DOMContentLoaded', () => {
 
-    const tabs = document.querySelectorAll('.tabheader__item'), // каждый элемент
+   function tabFunc(){
+      const tabs = document.querySelectorAll('.tabheader__item'), // каждый элемент
     tabscontent = document.querySelectorAll('.tabcontent'), // каждая фоточка
     tabsParent = document.querySelector('.tabheader__items'); // отец элементов
 
@@ -35,6 +36,89 @@ window.addEventListener('DOMContentLoaded', () => {
              })
       } 
     })
+   }
+   tabFunc();
 
 
+   function dateFunc(){
+       const deadline = '2021-03-13';
+
+     //это функция будет определять разницу между дедлайном и текушим временим
+    function getTimeRemaining(endTime){
+       const t = Date.parse(endTime) - Date.parse(new Date())
+             days = Math.floor(t/ (1000*60*60*24)),
+             hours = Math.floor((t/ (1000*60*60)%24)),
+             minutes = Math.floor((t/ 1000/60)%60),
+             seconds = Math.floor((t/ 1000)%60);
+         
+             return {
+                  'total': t,
+                  'days': days,
+                  'hours': hours,
+                  'minutes': minutes,
+                  'seconds': seconds
+             };
+    }
+
+    //это функцию будет устанавливать наш таймер на страницу 
+    function setClock(selector,endTime){
+       const timer = document.querySelector(selector),
+       days = timer.querySelector('#days'),
+       hours = timer.querySelector('#hours'),
+       minutes = timer.querySelector('#minutes'),
+       seconds = timer.querySelector('#seconds'),
+       timerInterval = setInterval(updateClock,1000);
+
+       updateClock();
+       function updateClock(){
+          const t = getTimeRemaining(endTime);
+
+          days.innerHTML = t.days;
+          hours.innerHTML = t.hours;
+          minutes.innerHTML = t.minutes;
+          seconds.innerHTML = t.seconds;
+
+          if(t.total <=0){
+             clearInterval(timerInterval);
+          }
+       }
+    }
+
+    setClock('.timer',deadline);
+   }
+   dateFunc();
+ 
+   //modal 
+   const modalTrigger = document.querySelectorAll('[data-modal]'), // находим все data-modal
+   modal = document.querySelector('.modal'),  // находим модальный окно
+   modalCloseBtn = document.querySelector('[data-close]'); // находим закрыть
+
+   modalTrigger.forEach(btn =>{         // этот слушатель события  при нажатии на кнопку показывает модальный окно
+     btn.addEventListener('click', ()=>{
+        modal.classList.add('show', 'fade');
+        modal.classList.remove('hide');
+        document.body.style.overflow = 'hidden'; // позволяет не скролить при откытом домадальном окне 
+
+   }); 
+   });    
+
+    function closeModal(){       
+          modal.classList.add('hide');
+          modal.classList.remove('show', 'fade');
+          document.body.style.overflow = '';
+    }
+
+   modalCloseBtn.addEventListener('click', closeModal);
+
+   modal.addEventListener('click', (event)=>{   // закрывает окно в другой области
+      if(event.target === modal){
+      closeModal();
+      }
+   });
+
+   document.addEventListener('keydown', (e)=>{     // закрывает окно при нажатии ESC
+        if(e.code === 'Escape' && modal.classList.contains('show')){
+           closeModal();
+        }
+   });
 });
