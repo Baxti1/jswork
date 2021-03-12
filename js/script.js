@@ -95,7 +95,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
    modalTrigger.forEach(btn =>{         // этот слушатель события  при нажатии на кнопку показывает модальный окно
      btn.addEventListener('click', ()=>{
-        modal.classList.add('show', 'fade');
+        modal.classList.add('show','fadeOneSecond');
         modal.classList.remove('hide');
         document.body.style.overflow = 'hidden'; // позволяет не скролить при откытом домадальном окне 
 
@@ -104,7 +104,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     function closeModal(){       
           modal.classList.add('hide');
-          modal.classList.remove('show', 'fade');
+          modal.classList.remove('show','fadeOneSecond');
           document.body.style.overflow = '';
     }
 
