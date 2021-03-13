@@ -41,7 +41,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
    function dateFunc(){
-       const deadline = '2021-03-13';
+       const deadline = '2021-03-14';
 
      //это функция будет определять разницу между дедлайном и текушим временим
     function getTimeRemaining(endTime){
@@ -92,14 +92,17 @@ window.addEventListener('DOMContentLoaded', () => {
    const modalTrigger = document.querySelectorAll('[data-modal]'), // находим все data-modal
    modal = document.querySelector('.modal'),  // находим модальный окно
    modalCloseBtn = document.querySelector('[data-close]'); // находим закрыть
-
-   modalTrigger.forEach(btn =>{         // этот слушатель события  при нажатии на кнопку показывает модальный окно
-     btn.addEventListener('click', ()=>{
-        modal.classList.add('show','fadeOneSecond');
+   
+   function openModal(){
+      modal.classList.add('show','fadeOneSecond');
         modal.classList.remove('hide');
         document.body.style.overflow = 'hidden'; // позволяет не скролить при откытом домадальном окне 
+        clearInterval(modalTimerById); // очишает наш таймер 
+   }
 
-   }); 
+
+   modalTrigger.forEach(btn =>{         // этот слушатель события  при нажатии на кнопку показывает модальный окно
+     btn.addEventListener('click', openModal); 
    });    
 
     function closeModal(){       
@@ -121,4 +124,16 @@ window.addEventListener('DOMContentLoaded', () => {
            closeModal();
         }
    });
+
+   const modalTimerById = setTimeout(openModal, 5000);
+
+   function showModalByScroll(){ // в конце страницы показывает окно
+       if(window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight){
+         openModal();
+         window.removeEventListener('scroll',showModalByScroll); // улаляет окно
+      }
+   }
+
+   window.addEventListener('scroll',showModalByScroll);
+   
 });
